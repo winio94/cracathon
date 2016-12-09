@@ -14,10 +14,10 @@ import java.util.List;
 public class PositionDataService {
 
     public PositionData getDaily(Person person) {
-       return new PositionData.Builder()
-               .withBad(0.9)
-               .withGood(0.1)
-               .build();
+        return new PositionData.Builder()
+                .withBad(0.9)
+                .withGood(0.1)
+                .build();
     }
 
     public PositionData getWeekly(Person person) {
@@ -28,23 +28,23 @@ public class PositionDataService {
     }
 
     public PositionData getMonthly(Person person) {
-       return new PositionData.Builder()
-               .withBad(0.9)
-               .withGood(0.1)
-               .build();
+        return new PositionData.Builder()
+                .withBad(0.9)
+                .withGood(0.1)
+                .build();
     }
 
     private PositionData getAverageValues(List<Measurement> measures) {
 
         Double summaryBack = 0D;
-        Double summaryBottom =0D;
+        Double summaryBottom = 0D;
 
-        measures.forEach(measurement -> {});
+        measures.forEach(measurement -> {
+        });
 
-        new PositionData.Builder()
+        return new PositionData.Builder()
                 .withBad(0.9)
                 .withGood(0.1)
                 .build();
-
     }
 }
