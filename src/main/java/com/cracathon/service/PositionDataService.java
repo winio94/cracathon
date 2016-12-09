@@ -1,10 +1,13 @@
 package com.cracathon.service;
 
-import com.cracathon.domain.Measurement;
-import com.cracathon.domain.Person;
+import com.cracathon.domain.*;
 import com.cracathon.dto.PositionData;
+import com.cracathon.repository.MeasurementRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,38 +16,96 @@ import java.util.List;
 @Service
 public class PositionDataService {
 
+    @Autowired
+    private MeasurementRepository measurementRepository;
+
     public PositionData getDaily(Person person) {
-        return new PositionData.Builder()
-                .withBad(0.9)
-                .withGood(0.1)
-                .build();
+        List<Measurement> measures = Collections.emptyList();
+        return this.calculatePositionData(measures);
     }
 
     public PositionData getWeekly(Person person) {
-        return new PositionData.Builder()
-                .withBad(0.9)
-                .withGood(0.1)
-                .build();
+        List<Measurement> measures = Collections.emptyList();
+        return this.calculatePositionData(measures);
     }
 
     public PositionData getMonthly(Person person) {
+        List<Measurement> measures = Collections.emptyList();
+       return this.calculatePositionData(measures);
+    }
+
+    private PositionData calculatePositionData(List<Measurement> measurements) {
+        AveragePressure averagePressure = getAverageValues(measurements);
+
+        List<Integer> measurementsBinaryData = new ArrayList<>();
+
+        for(Measurement measurement : measurements) {
+            Pressure pressure = measurement.getPressure();
+
+            BackPressure backPressure = pressure.getBack();
+            Double backResult = (backPressure.getTop() - backPressure.getBottom()) / averagePressure.getBack();
+
+            BottomPressure bottomPressure = pressure.getBottom();
+            Double bottomResult = (bottomPressure.getFront() - bottomPressure.getBack()) / averagePressure.getBottom();
+
+            Integer binaryBackResult = (backResult < averagePressure.getBack()) ? 1: 0;
+            Integer binaryBottomResult = (bottomResult < averagePressure.getBottom()) ? 1: 0;
+
+            Integer overallResult = binaryBackResult + binaryBottomResult;
+
+            if(overallResult.equals(0)) {
+                measurementsBinaryData.add(0);
+            } else if(overallResult.equals(1) || overallResult.equals(2)) {
+                measurementsBinaryData.add(1);
+            }
+        }
+
+        Integer goodFactorFrequency = Collections.frequency(measurementsBinaryData, 1);
+        Integer badFactorFrequency = Collections.frequency(measurementsBinaryData, 0);
+        Integer binaryDataSize = measurementsBinaryData.size();
+
         return new PositionData.Builder()
-                .withBad(0.9)
-                .withGood(0.1)
+                .withBad((double)badFactorFrequency / binaryDataSize)
+                .withGood((double)goodFactorFrequency / binaryDataSize)
                 .build();
     }
 
-    private PositionData getAverageValues(List<Measurement> measures) {
+    private AveragePressure getAverageValues(List<Measurement> measures) {
 
-        Double summaryBack = 0D;
-        Double summaryBottom = 0D;
+        Double summaryBack = 0.;
+        Double summaryBottom = 0.;
 
-        measures.forEach(measurement -> {
-        });
+        for(Measurement measurement : measures) {
 
-        return new PositionData.Builder()
-                .withBad(0.9)
-                .withGood(0.1)
-                .build();
+            Pressure pressure = measurement.getPressure();
+
+            BackPressure backPressure = pressure.getBack();
+            BottomPressure bottomPressure = pressure.getBottom();
+
+            summaryBack += (backPressure.getTop() - backPressure.getBottom()) / 2;
+            summaryBottom += (bottomPressure.getFront() - bottomPressure.getBack()) / 2;
+
+        }
+
+        return new AveragePressure(summaryBack, summaryBottom);
+    }
+
+    private static class AveragePressure {
+
+        private Double back = 0.;
+        private Double bottom = 0.;
+
+        public AveragePressure(Double back, Double bottom) {
+            this.back = back;
+            this.bottom = bottom;
+        }
+
+        public Double getBack() {
+            return back;
+        }
+
+        public Double getBottom() {
+            return bottom;
+        }
     }
 }
