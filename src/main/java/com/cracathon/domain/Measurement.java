@@ -2,6 +2,7 @@ package com.cracathon.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * Created by Michał on 2016-12-09.
@@ -14,13 +15,13 @@ public class Measurement {
     private Long id;
 
     @NotNull
-    private Double temperature;
+    private Integer temperature;
 
     @NotNull
-    private Double light;
+    private Integer light;
 
     @NotNull
-    private Double noise;
+    private Integer noise;
 
     @ManyToOne
     @JoinColumn
@@ -30,6 +31,9 @@ public class Measurement {
     @OneToOne
     private Pressure pressure;
 
+    @NotNull
+    private Date measureDate;
+
     public Long getId() {
         return id;
     }
@@ -38,27 +42,27 @@ public class Measurement {
         this.id = id;
     }
 
-    public Double getTemperature() {
+    public Integer getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Double temperature) {
+    public void setTemperature(Integer temperature) {
         this.temperature = temperature;
     }
 
-    public Double getLight() {
+    public Integer getLight() {
         return light;
     }
 
-    public void setLight(Double light) {
+    public void setLight(Integer light) {
         this.light = light;
     }
 
-    public Double getNoise() {
+    public Integer getNoise() {
         return noise;
     }
 
-    public void setNoise(Double noise) {
+    public void setNoise(Integer noise) {
         this.noise = noise;
     }
 
@@ -76,5 +80,13 @@ public class Measurement {
 
     public void setPressure(Pressure pressure) {
         this.pressure = pressure;
+    }
+
+    public Date getMeasureDate() {
+        return measureDate;
+    }
+
+    public void setMeasureDate(Date measureDate) {
+        this.measureDate = measureDate;
     }
 }

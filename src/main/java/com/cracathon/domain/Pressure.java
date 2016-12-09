@@ -1,8 +1,6 @@
 package com.cracathon.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  * Created by Michał on 2016-12-09.
@@ -11,6 +9,7 @@ import javax.persistence.OneToOne;
 public class Pressure {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
