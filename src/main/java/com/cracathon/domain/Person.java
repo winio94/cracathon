@@ -17,7 +17,7 @@ public class Person {
     @NotNull
     private String personId;
 
-    @OneToMany(mappedBy = "preson")
+    @OneToMany(mappedBy = "person")
     private Set<Measurement> measurements;
 
     public Long getId() {
