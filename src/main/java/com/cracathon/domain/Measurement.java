@@ -38,6 +38,8 @@ public class Measurement {
     @Convert(converter=PersistentLocalDateTime.class)
     private LocalDateTime measureDate;
 
+    private Double weight;
+
     public Long getId() {
         return id;
     }
