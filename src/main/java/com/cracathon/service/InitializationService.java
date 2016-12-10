@@ -18,7 +18,7 @@ public class InitializationService {
     @Inject
     private PersonRepository personRepository;
 
-    @PostConstruct
+    //@PostConstruct
     public void postConstruct() {
         for (int i = 0; i < PERSON_AMOUNT; i++) {
             Person person = new Person();

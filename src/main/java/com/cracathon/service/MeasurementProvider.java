@@ -39,7 +39,7 @@ public class MeasurementProvider {
     @Inject
     private BottomPressureRepository bottomPressureRepository;
 
-    @Scheduled(fixedRate = 1000)
+    //@Scheduled(fixedRate = 1000)
     public void generateMeasurement() {
         Iterable<Person> persons = personRepository.findAll();
         for (Person person : persons) {
