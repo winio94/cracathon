@@ -46,6 +46,11 @@
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
+        <dependency>
+            <groupId>br.com.otavio</groupId>
+            <artifactId>jpa-javatime</artifactId>
+            <version>0.2</version>
+        </dependency>
     </dependencies>
 
     <build>

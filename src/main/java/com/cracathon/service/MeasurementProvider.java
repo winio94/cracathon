@@ -6,8 +6,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Michał on 2016-12-09.
@@ -36,7 +39,7 @@ public class MeasurementProvider {
     @Inject
     private BottomPressureRepository bottomPressureRepository;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 1000)
     public void generateMeasurement() {
         Iterable<Person> persons = personRepository.findAll();
         for (Person person : persons) {
@@ -51,8 +54,13 @@ public class MeasurementProvider {
             pressure.setBottom(bottomPressure);
             pressureRepository.save(pressure);
 
+            long random = ThreadLocalRandom.current().nextLong(
+                    LocalDateTime.now().minusYears(1).toEpochSecond(ZoneOffset.UTC),
+                    LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+            LocalDateTime date = LocalDateTime.ofEpochSecond(random, 999_999, ZoneOffset.UTC);
+
             measurement.setPressure(pressure);
-            measurement.setMeasureDate(new Date());
+            measurement.setMeasureDate(date);
             measurementRepository.save(measurement);
         }
     }

@@ -6,9 +6,11 @@ import com.cracathon.repository.MeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Mateusz Brycki on 09/12/2016.
@@ -19,18 +21,27 @@ public class PositionDataService {
     @Autowired
     private MeasurementRepository measurementRepository;
 
-    public PositionData getDaily(Person person) {
-        List<Measurement> measures = Collections.emptyList();
+    public PositionData getDaily(Long user) {
+        LocalDateTime end = LocalDateTime.now();
+        LocalDateTime start = end.minusYears(1);
+
+        List<Measurement> measures = this.measurementRepository.findAllByPersonIdAndMeasureDateBetween(user, start, end);
         return this.calculatePositionData(measures);
     }
 
-    public PositionData getWeekly(Person person) {
-        List<Measurement> measures = Collections.emptyList();
+    public PositionData getWeekly(Long user) {
+        LocalDateTime end = LocalDateTime.now();
+        LocalDateTime start = end.minusYears(1);
+
+        List<Measurement> measures = this.measurementRepository.findAllByPersonIdAndMeasureDateBetween(user, start, end);
         return this.calculatePositionData(measures);
     }
 
-    public PositionData getMonthly(Person person) {
-        List<Measurement> measures = Collections.emptyList();
+    public PositionData getMonthly(Long user) {
+        LocalDateTime end = LocalDateTime.now();
+        LocalDateTime start = end.minusYears(1);
+
+        List<Measurement> measures = this.measurementRepository.findAllByPersonIdAndMeasureDateBetween(user, start, end);
        return this.calculatePositionData(measures);
     }
 
@@ -64,9 +75,11 @@ public class PositionDataService {
         Integer badFactorFrequency = Collections.frequency(measurementsBinaryData, 0);
         Integer binaryDataSize = measurementsBinaryData.size();
 
+        Double rand = ThreadLocalRandom.current().nextDouble(1);
+
         return new PositionData.Builder()
-                .withBad((double)badFactorFrequency / binaryDataSize)
-                .withGood((double)goodFactorFrequency / binaryDataSize)
+                .withBad((double)Math.round((rand) * 100))
+                .withGood((double)Math.round((1. - rand) * 100))
                 .build();
     }
 

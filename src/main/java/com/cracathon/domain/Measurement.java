@@ -1,8 +1,11 @@
 package com.cracathon.domain;
 
+import br.com.otavio.jpa.javatime.PersistentLocalDateTime;
+import com.cracathon.converter.LocalDateConverter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by Michał on 2016-12-09.
@@ -32,7 +35,8 @@ public class Measurement {
     private Pressure pressure;
 
     @NotNull
-    private Date measureDate;
+    @Convert(converter=PersistentLocalDateTime.class)
+    private LocalDateTime measureDate;
 
     public Long getId() {
         return id;
@@ -82,11 +86,11 @@ public class Measurement {
         this.pressure = pressure;
     }
 
-    public Date getMeasureDate() {
+    public LocalDateTime getMeasureDate() {
         return measureDate;
     }
 
-    public void setMeasureDate(Date measureDate) {
+    public void setMeasureDate(LocalDateTime measureDate) {
         this.measureDate = measureDate;
     }
 }

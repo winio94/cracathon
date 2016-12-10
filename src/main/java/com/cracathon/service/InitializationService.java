@@ -13,7 +13,7 @@ import javax.inject.Named;
 @Named
 public class InitializationService {
 
-    private static final int PERSON_AMOUNT = 20;
+    private static final int PERSON_AMOUNT = 5;
 
     @Inject
     private PersonRepository personRepository;
